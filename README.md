@@ -54,5 +54,5 @@ Alerts if:
 # Contact
 For questions or support, please reach out via GitHub Issues or email.
 
-AI used to build this page
+** AI used to build this page
 
