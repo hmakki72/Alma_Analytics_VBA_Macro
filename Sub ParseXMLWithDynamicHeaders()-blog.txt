@@ -55,12 +55,6 @@ Sub ParseXMLWithDynamicHeaders()
     Set elementNodes = schemaNode.SelectNodes("*[local-name()='element']")
     '
     For Each nodeBook In elementNodes
-       'Loop on attributes. THIS is just for testing purposes
-        'Dim attr As Object
-        'For Each attr In nodeBook.Attributes
-               ' MsgBox ("  Attribute: " & attr.nodeName & " = " & attr.NodeValue)
-        'Next attr
-              
         If Not attributeID Is Nothing Then
             'columnHeading is found
             Set attributeID = nodeBook.Attributes.getNamedItem("saw-sql:columnHeading")
@@ -94,4 +88,5 @@ Sub ParseXMLWithDynamicHeaders()
   End With
 
 End Sub
+
 
