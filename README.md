@@ -3,6 +3,7 @@ This VBA macro downloads and parses an XML report from Alma Analytics using a RE
 If you are new the Excel Developer, you may need to check these two links first:
  - Show the Developer tab: https://github.com/hmakki72/Alma_Analytics_VBA_Macro/tree/main
  - Enable or disable macros in Microsoft 365 files: https://support.microsoft.com/en-us/office/enable-or-disable-macros-in-microsoft-365-files-12b036fd-d140-4e74-b45e-16fed1a7e5c6
+ - Run a macro in Excel: https://support.microsoft.com/en-us/office/run-a-macro-in-excel-5e855fd2-02d1-45f5-90a3-50e645fe3155#:~:text=Select%20the%20macro%20you%20want,go%20to%20Run%20%3E%20Run%20Macro.
 
  
 # Features 
