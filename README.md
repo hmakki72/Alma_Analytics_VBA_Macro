@@ -1,5 +1,8 @@
 # Alma_Analytics_VBA_Macro
 This VBA macro downloads and parses an XML report from Alma Analytics using a REST API. It dynamically extracts column headers and row data, then populates them into an Excel worksheet. Ideal for automating data retrieval and reporting in Excel or Power BI.
+If you are new the Excel Developer, you may need to check these two links first:
+ - Show the Developer tab: https://github.com/hmakki72/Alma_Analytics_VBA_Macro/tree/main
+ - Enable or disable macros in Microsoft 365 files: https://support.microsoft.com/en-us/office/enable-or-disable-macros-in-microsoft-365-files-12b036fd-d140-4e74-b45e-16fed1a7e5c6
 
  
 # Features 
