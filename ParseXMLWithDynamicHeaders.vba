@@ -69,7 +69,7 @@ Sub ParseXMLWithDynamicHeaders()
         End If
         ' Fill column headings in the worksheet
         ws.Cells(1, cnt + 1).Value = attributeID.NodeValue
-        ' Add column headings to colunnames()
+        ' Add column names to colunnames()
         colunnames(cnt) = nodeBook.Attributes.getNamedItem("name").NodeValue
         cnt = cnt + 1
     Next nodeBook
@@ -83,13 +83,12 @@ Sub ParseXMLWithDynamicHeaders()
         Exit Sub
     End If
     
-    ' Loop through rows and write data starting from the 2nd row
+    ' Loop through rows and write data starting from the 2nd row on the worksheet (ws)
     cellrow = 2
     For Each row In rows
         For ChildNodesCounter = 0 To row.ChildNodes.length - 1
             ' Find the correct column for the value
-            ' by matching the column name with childe node name
-            i = 0
+            ' by matching the column name in colunnames array with XML childe node name
             For i = 0 To UBound(colunnames) - 1
               If colunnames(i) = row.ChildNodes(ChildNodesCounter).NodeName Then
                 ' Insert the value in the correct column
