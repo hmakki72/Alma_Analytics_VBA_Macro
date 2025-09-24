@@ -31,6 +31,7 @@ Sub ParseXMLWithDynamicHeaders()
     
     ' Get HTTP request
     ' Define the URL
+    ' This param is important &col_names=true&
     url = "https://{YOUR ANALYTICS URL}?path={PATH TO THE REPORT}&limit=25&col_names=true&apikey={YOUR API KEY}"
     ' Create HTTP request
     Set http = CreateObject("MSXML2.XMLHTTP")
