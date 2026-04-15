@@ -73,6 +73,7 @@ Sub ParseXMLWithDynamicHeaders_ignoreColumn0()
         '' Ignore Column0 if found
         If attributeID.NodeValue <> "Column0" Then
             ' Fill column headings in the worksheet
+            ws.Cells(cellrow, i + 1).NumberFormat = "0" 'To prevent Excel from auto formating the value
             ws.Cells(1, cnt + 1).Value = attributeID.NodeValue
             colunnames(cnt) = nodeBook.Attributes.getNamedItem("name").NodeValue
             cnt = cnt + 1
