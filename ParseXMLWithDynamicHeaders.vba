@@ -93,6 +93,7 @@ Sub ParseXMLWithDynamicHeaders()
             For i = 0 To UBound(colunnames) - 1
               If colunnames(i) = row.ChildNodes(ChildNodesCounter).NodeName Then
                 ' Insert the value in the correct column
+                ws.Cells(cellrow, i + 1).NumberFormat = "0" 'To prevent Excel from auto formating the value
                 ws.Cells(cellrow, i + 1).Value = row.ChildNodes(ChildNodesCounter).Text
               End If
             Next i
