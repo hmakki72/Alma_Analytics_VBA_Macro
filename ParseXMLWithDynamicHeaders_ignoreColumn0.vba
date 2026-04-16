@@ -1,4 +1,5 @@
 Sub ParseXMLWithDynamicHeaders_ignoreColumn0()
+  
   Dim http As Object
   'XML
   Dim xmlDoc As Object
@@ -9,20 +10,22 @@ Sub ParseXMLWithDynamicHeaders_ignoreColumn0()
   Dim nodeBook As Object
   Dim attributeID As Object
   Dim attributeName As Object
+  Dim rows As Object
+  Dim row As Object
+  Dim childnode As Object
+
 
   Dim headerName As String
   '
   Dim ws As Worksheet
   '
-  Dim rows As Object
-  Dim row As Object
-  Dim childnode As Object
   Dim ChildNodesCounter As Integer
   Dim cellrow As Integer, cnt As Integer
   Dim columncount As Integer
   Dim colunnames() As String
+  Dim colundatatypes() As String
   Dim arraylength As Integer
-
+  Dim datatype As String
  
   With ThisWorkbook.Sheets(1)
     ' Set the target worksheet and clean contents before starting
@@ -32,7 +35,8 @@ Sub ParseXMLWithDynamicHeaders_ignoreColumn0()
     ' Get HTTP request
     ' Define the URL
     ' This param is important &col_names=true&
-    ' url = "https://{YOUR ANALYTICS URL}?path={PATH TO THE REPORT}&limit=25&col_names=true&apikey={YOUR API KEY}"
+    url = "https://{YOUR ANALYTICS URL}?path={PATH TO THE REPORT}&limit=25&col_names=true&apikey={YOUR API KEY}"
+    
     ' Create HTTP request
     Set http = CreateObject("MSXML2.XMLHTTP")
     http.Open "GET", url, False
@@ -53,14 +57,17 @@ Sub ParseXMLWithDynamicHeaders_ignoreColumn0()
         Exit Sub
     End If
 
-    ' Get Column Headers
+    ' Get Column Headers and columndatatypes()
     Set schemaNode = xmlDoc.SelectSingleNode("//*[local-name()='schema']/*[local-name()='complexType']/*[local-name()='sequence']")
     Set elementNodes = schemaNode.SelectNodes("*[local-name()='element']")
     ' Add columns headers to the worksheet
     ' and save the column names in array colunnames()
     arraylength = elementNodes.length
     ReDim Preserve colunnames(arraylength)
+    ReDim Preserve colundatatypes(arraylength)
     For Each nodeBook In elementNodes
+        ' Get data type from the XML node
+        Set attributeDataType = nodeBook.Attributes.getNamedItem("type")
         If Not attributeID Is Nothing Then
             'columnHeading is found in the node
             Set attributeID = nodeBook.Attributes.getNamedItem("saw-sql:columnHeading")
@@ -73,9 +80,10 @@ Sub ParseXMLWithDynamicHeaders_ignoreColumn0()
         '' Ignore Column0 if found
         If attributeID.NodeValue <> "Column0" Then
             ' Fill column headings in the worksheet
-            ws.Cells(cellrow, i + 1).NumberFormat = "0" 'To prevent Excel from auto formating the value
             ws.Cells(1, cnt + 1).Value = attributeID.NodeValue
+            ' Add items to colunnames and colundatatypes arrays
             colunnames(cnt) = nodeBook.Attributes.getNamedItem("name").NodeValue
+            colundatatypes(cnt) = nodeBook.Attributes.getNamedItem("type").NodeValue 'Add data type to colundatatypes list
             cnt = cnt + 1
         End If
 
@@ -89,16 +97,34 @@ Sub ParseXMLWithDynamicHeaders_ignoreColumn0()
         MsgBox "No <Row> elements found."
         Exit Sub
     End If
-    
+
     ' Loop through rows and write data starting from the 2nd row on the worksheet (ws)
-    cellrow = 2
+    cellrow = 2 ' Start from the 2nd row
     For Each row In rows
         For ChildNodesCounter = 0 To row.ChildNodes.length - 1
             ' Find the correct column for the value
             ' by matching the column name in colunnames array with XML childe node name
             For i = 0 To UBound(colunnames) - 1
               If colunnames(i) = row.ChildNodes(ChildNodesCounter).NodeName Then
+                ' Check the data type to
+                ' prevent Excel from deciding the format
+                Select Case True
+                    Case InStr(1, colundatatypes(i), "int") > 0
+                        ' "Number"
+                        datatype = "0"
+                    Case InStr(1, colundatatypes(i), "date") > 0
+                        ' "Date"
+                        datatype = "m/d/yyyy"
+                    Case InStr(1, colundatatypes(i), "string") > 0
+                        ' Text
+                        datatype = "@"
+                    Case Else
+                        ' Let Excel decides
+                        datatype = "General"
+                End Select
+
                 ' Insert the value in the correct column
+                ws.Cells(cellrow, i + 1).NumberFormat = datatype
                 ws.Cells(cellrow, i + 1).Value = row.ChildNodes(ChildNodesCounter).Text
               End If
             Next i
@@ -109,3 +135,5 @@ Sub ParseXMLWithDynamicHeaders_ignoreColumn0()
 
 
   End With
+
+End Sub
